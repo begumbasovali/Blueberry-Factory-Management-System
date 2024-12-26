@@ -96,10 +96,11 @@
                   <input 
                   type="tel" 
                   id="farmer-phone"
-                  placeholder="Enter farmer's phone number" 
-                  name="farmer-phone" 
-                  pattern="\d{10}"
-                  title="Please enter a 10-digit phone number" required/>
+                  pattern="^[0-9]{10}$"
+                  title="Please enter a valid 10-digit phone number"
+                  placeholder="5XX XXX XXXX"
+                  maxlength="10"
+                 required/>
                 </div>
                 <div class="form-group">
                   <label for="farmer-email">Farmer Email:</label>
@@ -107,6 +108,8 @@
                   type="email"
                   id="farmer-email"
                   placeholder="Enter farmer email"
+                  pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+                  title="Please enter a valid email address"
                   name="farmer-email" required />
                 </div>
               </div>
@@ -245,6 +248,10 @@
                 <input 
                 type="date" 
                 id="purchase-date"
+                pattern="\d{4}-\d{2}-\d{2}"
+                title="Please enter a date in YYYY-MM-DD format"
+                min="1900-01-01"
+                max="3099-12-31"
                 name="purchase-date" required>
               </div>
               <!-- Total Cost Display -->
@@ -376,6 +383,10 @@
           type="date" 
           id="start-date" 
           name="start-date" 
+          title="Please enter a date in YYYY-MM-DD format"
+          min="1900-01-01"
+          max="3099-12-31"
+          pattern="\d{4}-\d{2}-\d{2}"
           required />
       </div>
       <div class="form-group">
@@ -384,6 +395,10 @@
           type="date" 
           id="end-date" 
           name="end-date" 
+          pattern="\d{4}-\d{2}-\d{2}"
+          title="Please enter a date in YYYY-MM-DD format"
+          min="1900-01-01"
+          max="3099-12-31"
           required />
       </div>
     </div>
@@ -472,7 +487,12 @@
         </div>
         <div class="form-group">
           <label for="stock-date">Stock Date</label>
-          <input type="date" id="stock-date" required>
+          <input type="date" 
+          id="stock-date" 
+          pattern="\d{4}-\d{2}-\d{2}"
+        title="Please enter a date in YYYY-MM-DD format"
+        min="1900-01-01"
+          max="3099-12-31"required>
         </div>
         <div class="form-group">
           <button type="button" id="add-packets-button">Add Packets</button>
@@ -498,7 +518,11 @@
         <!-- Add Restock Date Input -->
     <div class="form-group">
       <label for="restock-date">Restock Date</label>
-      <input type="date" id="restock-date" required>
+      <input type="date" id="restock-date"
+      pattern="\d{4}-\d{2}-\d{2}"
+        title="Please enter a date in YYYY-MM-DD format"
+        min="1900-01-01"
+          max="3099-12-31" required>
     </div>
         <div class="form-group">
           <button type="button" id="set-stock-level-button">Set Stock Level</button>
@@ -537,14 +561,20 @@
             <input 
               type="tel" 
               id="new-customer-phone" 
-              pattern="\d{10}"
+              pattern="^[0-9]{10}$"
+              title="Please enter a valid 10-digit phone number"
+              placeholder="5XX XXX XXXX"
+              maxlength="10"
               required />
           </div>
           <div class="form-group">
             <label for="new-customer-email">Email:</label>
             <input 
               type="email" 
-              id="new-customer-email" 
+              id="new-customer-email"
+              placeholder="name@example.com"
+              pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" 
+              title="Please enter a valid email address"
               required />
           </div>
         </div>
@@ -620,7 +650,11 @@
           <label for="order-date">Order Date:</label>
           <input 
             type="date" 
-            id="order-date" 
+            id="order-date"
+            pattern="\d{4}-\d{2}-\d{2}"
+            title="Please enter a date in YYYY-MM-DD format"
+            min="1900-01-01"
+            max="3099-12-31" 
             required />
         </div>
         <div class="form-group">
@@ -754,11 +788,21 @@
     <div class="form-row">
       <div class="form-group">
         <label for="report-start-date">Start Date:</label>
-        <input type="date" id="report-start-date" required>
+        <input 
+        type="date" 
+        id="report-start-date" 
+        pattern="\d{4}-\d{2}-\d{2}"
+      title="Please enter a date in YYYY-MM-DD format"
+      min="1900-01-01"
+      max="3099-12-31"required>
       </div>
       <div class="form-group">
         <label for="report-end-date">End Date:</label>
-        <input type="date" id="report-end-date" required>
+        <input type="date" id="report-end-date" 
+        pattern="\d{4}-\d{2}-\d{2}"
+      title="Please enter a date in YYYY-MM-DD format"
+      min="1900-01-01"
+      max="3099-12-31"required>
       </div>
     </div>
     
@@ -875,11 +919,17 @@
     <div class="form-row">
       <div class="form-group">
         <label for="report-start">Start Date:</label>
-        <input type="date" id="report-start" required>
+        <input type="date" id="report-start" pattern="\d{4}-\d{2}-\d{2}"
+        title="Please enter a date in YYYY-MM-DD format"
+        min="1900-01-01"
+          max="3099-12-31" required>
       </div>
       <div class="form-group">
         <label for="report-end">End Date:</label>
-        <input type="date" id="report-end" required>
+        <input type="date" id="report-end" pattern="\d{4}-\d{2}-\d{2}"
+        title="Please enter a date in YYYY-MM-DD format"
+        min="1900-01-01"
+          max="3099-12-31"required>
       </div>
     </div>
     <button type="submit">Generate Report</button>
@@ -912,11 +962,17 @@
       <div class="form-row">
         <div class="form-group">
           <label for="comprehensive-start-date">Start Date:</label>
-          <input type="date" id="comprehensive-start-date" required>
+          <input type="date" id="comprehensive-start-date"pattern="\d{4}-\d{2}-\d{2}"
+          title="Please enter a date in YYYY-MM-DD format"
+          min="1900-01-01"
+            max="3099-12-31" required>
         </div>
         <div class="form-group">
           <label for="comprehensive-end-date">End Date:</label>
-          <input type="date" id="comprehensive-end-date" required>
+          <input type="date" id="comprehensive-end-date" pattern="\d{4}-\d{2}-\d{2}"
+          title="Please enter a date in YYYY-MM-DD format"
+          min="1900-01-01"
+            max="3099-12-31"required>
         </div>
       </div>
       <div class="button-group">

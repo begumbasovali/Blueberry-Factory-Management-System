@@ -107,6 +107,9 @@ Render Farmers Table
       </tr>
     `).join('');
 }
+// Attach event listener to the Clear Filters button
+document.getElementById("clear-filters-btn")?.addEventListener("click", clearFilters);
+
 
 /**
  Show Message

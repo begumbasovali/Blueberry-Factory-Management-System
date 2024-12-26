@@ -1,8 +1,8 @@
 .inventory-alerts-container {
   margin: 20px 0;
   padding: 15px;
-  background-color: #fff3cd;
-  border: 1px solid #ffeeba;
+  background-color: #f5c6cb;
+  border: 1px solid #f5c6cb;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
@@ -52,7 +52,7 @@
 }
 
 .alert-actions button:first-child {
-  background-color: #007bff;
+  background-color: #05b3c6;
   color: white;
 }
 
@@ -61,7 +61,7 @@
 }
 
 .alert-actions .dismiss-btn {
-  background-color: #6c757d;
+  background-color: #818b94;
   color: white;
 }
 
