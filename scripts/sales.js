@@ -192,6 +192,7 @@ function handleFormSubmission(event) {
     
     // Reset form
     salesForm.reset();
+    orderIdInput.value = generateOrderId();
     document.getElementById("selected-customer-details").innerHTML = "";
     
     alert("Sale recorded successfully!");
