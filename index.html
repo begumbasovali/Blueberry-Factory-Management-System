@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blueberry Factory Management</title>
+  
+  <!--Css Files Link-->
+  <link rel="stylesheet" href="./styles/index.css" />
+  <link rel="stylesheet" href="./styles/inventoryAlerts.css" />
+  
+  <!--Google Font EB Garamond and Lato-->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400..800&family=Lato:wght@300;400;700&display=swap"
+  rel="stylesheet"/>
+  
+  
+  <!-- Third-party Libraries -->
+  <!-- Chart.js for visualizations -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- PDF Generation Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+
+  <!-- My application scripts -->
+  <script src="./scripts/supplier.js" defer></script>
+  <script src="./scripts/purchases.js" defer></script>
+  <script src="./scripts/productCategorization.js" defer></script>
+  <script src="./scripts/sales.js" defer></script>
+  <script src="./scripts/salesAnalytics.js" defer></script>
+  <script src="./scripts/salesReports.js" defer></script>
+  <script src="./scripts/financial.js" defer></script>
+  <script src="./scripts/finalReport.js" defer></script>
+  <script src="./scripts/app.js" type="module" defer></script>
+</head>
+<body>
+  <div class="container">
+    <!-- Left sidebar -->
+    <aside class="sidebar">
+      <h3>Operations</h3>
+      <nav class="sidebar-buttons-container">
+        <button class="sidebar-buttons" data-section="home-section"><b>Home</b></button>
+        <button class="sidebar-buttons" data-section="supplier-section"><b>Supplier Management</b></button>
+        <button class="sidebar-buttons" data-section="product-categorization-section"><b>Product Categorization</b></button>
+        <button class="sidebar-buttons" data-section="sales-management-section"><b>Sales Management</b></button>
+        <button class="sidebar-buttons" data-section="financial-section"><b>Financial Analysis</b></button>
+        <button class="sidebar-buttons" data-section="inventory-management-section"><b>Inventory Management</b></button>
+        <button class="sidebar-buttons" data-section="comprehensive-report-section"><b>Comprehensive Report</b></button>
+      </nav>
+    </aside>
+    <!--Main Section-->
+    <main>
+      <!-- Header -->
+      <header>
+        <h1>Blueberry Factory Management</h1>
+      </header>
+      <!--HOME SECTION-->
+      <section id="home-section" class="content-section active" >
+        <h2>Home</h2>
+        <h3>Welcome to the Blueberry Factory Management System</h3>
+        <p>You can manage suppliers, inventory, sales, and more with ease.</p>
+      </section>
+
+      <!--SECTION-1: SUPPLIER SECTION-->
+      <section id="supplier-section" class="content-section">
+        <h2>Supplier Management</h2>
+        <p>Manage all your suppliers here. Add, view, edit, or delete supplier details.</p>
+        <form id="supplier-form">
+          <fieldset>
+            <legend>Farmer's Information</legend>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="farmer-id">Farmer ID:</label>
+                  <input 
+                  type="text" 
+                  id="farmer-id"
+                  pattern="\d{6}" 
+                  title="Farmer ID must be 6 digits" 
+                  placeholder="Enter farmer ID (123456)" 
+                  name="farmer-id" required />
+                </div>
+                <div class="form-group">
+                  <label for="farmer-name">Farmer Name: </label>
+                  <input 
+                  type="text"
+                  id="farmer-name"
+                  placeholder="Begüm Basovali"
+                  name="farmer-name" required />
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="farmer-phone">Farmer Phone:</label>
+                  <input 
+                  type="tel" 
+                  id="farmer-phone"
+                  placeholder="Enter farmer's phone number" 
+                  name="farmer-phone" 
+                  pattern="\d{10}"
+                  title="Please enter a 10-digit phone number" required/>
+                </div>
+                <div class="form-group">
+                  <label for="farmer-email">Farmer Email:</label>
+                  <input 
+                  type="email"
+                  id="farmer-email"
+                  placeholder="Enter farmer email"
+                  name="farmer-email" required />
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="farmer-address">Farmer Address:</label>
+                  <input 
+                  type="text" 
+                  id="farmer-address"
+                  placeholder="Enter farmer Address" 
+                  name="farmer-address" required />
+                </div>
+                <div class="form-group">
+                  <label for="farmer-country">Farmer Country:</label>
+                  <input 
+                  type="text" 
+                  id="farmer-country"
+                  placeholder="Enter farmer Country" 
+                  name="farmer-country" required />
+                </div>
+              </div>
+
+           
+          </fieldset>
+          
+          <button type="submit">Add Farmer</button>
+        </form>
+        <!-- Add this inside supplier-section, after the supplier-form -->
+        <div id="farmerMessage" class="message-div" style="display: none;"></div>
+        <!-- List and Search Suppliers -->
+        <div class="farmers-list-container">
+          <h3>Search Farmers</h3>
+          <!-- Filter by country name -->
+          <div class="filtering-options">
+            <div class="filter-group">
+              <label for="select-country">Filter by Country:</label>
+              <select id="country-dropdown" aria-label="Select a Country" name="select-country">
+                <option value="all"selected>All Countries</option>
+                <!-- Country options will be dynamically loaded here -->
+              </select>
+            </div>
+            <!-- Filter by Farmer -->
+            <div class="filter-group">
+              <label for="select-farmer">Filter by Farmer Name:</label>
+              <select id="farmer-name-dropdown" aria-label="Select a Farmer" name="select-farmer">
+                <option value="all" selected>All Farmers</option>
+                <!-- Farmers options will be dynamically loaded here -->
+              </select>
+            </div>
+            <button type="button" id="clear-filters-btn" class="btn-clear">Clear Filters</button>
+          </div>
+          <div class="search-controls">
+            <input 
+            type="text" 
+            id="search-farmer-input" 
+            class="search-input" 
+            placeholder="Search by name or location"
+            aria-label="Search farmers by name or location">
+          <button type="button" id="search-farmer-btn" class="btn-search">Search</button>
+          <button type="button" id="clear-farmer-btn" class="btn-clear">Clear</button>
+          </div>
+          
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Farmer ID</th>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Address</th>
+                <th>Country</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="farmer-list">
+                <!-- Farmer rows will be dynamically added here -->
+            </tbody>
+          </table>
+          <div id="export-farmers" class="export-farmers-button">
+            <button id="export-btn">Export Farmer Details</button>
+          </div>
+        </div>
+        <!-- Export Farmer Details -->
+        
+        
+        <!--Part-2: PURCHASE RECORDS-->
+        <div id="purchase-records-container" >
+          <h2>Purchase Records</h2>
+          <form id="purchase-form">
+            <fieldset>
+              <legend>Purchase Informations</legend>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="purchase-id">Purchase ID:</label>
+                  <input 
+                  type="text" 
+                  id="purchase-id"
+                  pattern="\d{4}" 
+                  title="Purchase ID must be 4 digits" 
+                  placeholder="Enter purchase ID (e.g., 1001)" 
+                  name="purchase-id" required />
+                </div>
+                <div class="form-group">
+                  <label for="select-farmer">Select Farmer ID:</label>
+                  <select 
+                  id="select-farmer" 
+                  name="select-farmer" required>
+                    <option value="">Select Farmer ID</option>
+                    <!-- Farmer IDs will be dynamically loaded here -->
+                  </select>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="quantity">Quantity (kg):</label>
+                  <input 
+                  type="number"
+                  id="quantity" 
+                  name="quantity" 
+                  min="1"
+                  step="0.1" required>
+                </div>
+                <div class="form-group">
+                  <label for="price-per-kg">Price per Kilogram:</label>
+                  <input 
+                  type="number" 
+                  id="price-per-kg"
+                  name="price-per-kg" 
+                  min="0.50"
+                  step="0.01" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="purchase-date">Date of Purchase:</label>
+                <input 
+                type="date" 
+                id="purchase-date"
+                name="purchase-date" required>
+              </div>
+              <!-- Total Cost Display -->
+              <div id="total-cost-display" class="form-group">
+                <h4>Total Cost: <span id="total-cost">$0.00</span></h4>
+              </div>
+            </fieldset>
+            <button type="submit">Record Purchase</button>
+            <button type="button" id="update-purchase-btn" class="hidden">Update Purchase</button>
+          </form>
+
+          <!-- Purchase Records Table -->
+          <div class="purchase-records-container">
+            <h3>List of Records and Filtering</h3>
+            <div class="purchase-filters">
+              <div class="filter-by-cost">
+                <label for="cost-range">Filter by Total Cost:</label>
+                <div class="cost-inputs">
+                  <input type="number" min="1" id="min-cost" placeholder="Min Cost" />
+                <input type="number" id="max-cost" placeholder="Max Cost" />
+                <button type="button" id="apply-cost-filter">Apply</button>
+              </div>
+            </div>
+            <div class="filtering-options">
+              <div class="filter-group">
+                <label for="sort-purchases">Sort by:</label>
+                <select id="sort-purchases">
+                  <option value="none" selected>None</option>
+                  <option value="date">Date</option>
+                  <option value="farmer">Farmer</option>
+                  <option value="amount">Amount</option>
+                </select>
+              </div>
+              <div class="filter-group">
+                <label for="sort-order">Order:</label>
+                <select id="sort-order">
+                  <option value="none" selected>None</option>
+                  <option value="asc">Ascending</option>
+                  <option value="desc">Descending</option>
+                </select>
+              </div>
+              
+              <button type="button" id="clear-purchases-filters-btn" class="btn-clear">Clear Filters</button>
+          </div>
+
+            </div>
+              
+            <div id="purchase-search-container" class="search-controls">
+              <input 
+              type="text" 
+              id="search-purchases-input" 
+              class="search-input" 
+              placeholder="Search by Purchase ID, Farmer ID, Quantity or Total Cost"
+              aria-label="Search purchases">
+              <button type="button" id="search-purchases-btn" class="btn-search">Search</button>
+              <button type="button" id="clear-purchases-btn" class="btn-clear">Clear</button>
+            </div>
+          </div>
+          <div class="purchase-records-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Purchase ID</th>
+                  <th>Farmer ID</th>
+                  <th>Quantity(kg)</th>
+                  <th>Price per kg</th>
+                  <th>Total Cost</th>
+                  <th>Date</th>
+                 
+                </tr>
+              </thead>
+              <tbody id="purchase-list">
+                <!-- Purchase rows will be dynamically added here -->
+              </tbody>
+            </table>
+          </div>
+          
+          <!-- Purchase Summary Section -->
+          <div class="purchase-summary-container">
+            <h3>Generate Purchase Summary</h3>
+            <form id="summary-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="summary-farmer">Select Farmer ID:</label>
+                  <select id="summary-farmer" name="summary-farmer">
+                    <option value="">All Farmers</option>
+                    <!-- Farmer IDs will be dynamically loaded here -->
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="summary-period">Select Period:</label>
+                  <select id="summary-period" name="summary-period">
+                    <option value="all">All Time</option>
+                    <option value="daily">Daily</option>
+                    <option value="weekly">Weekly</option>
+                    <option value="monthly">Monthly</option>
+                  </select>
+                </div>
+              </div>
+              <button type="submit">Generate Summary</button>
+            </form>
+            <div id="summary-result">
+              <!-- Summary results will be displayed here -->
+            </div>
+          </div>
+
+          <!-- Expense Overview -->
+          <div id="expense-overview" class="expense-overview">
+            <h3>Expense Overview</h3>
+            <div class="expense-summary">
+              <p><strong>Today:</strong><span id="expense-today">0.00</span></p>
+              <p><strong>This Week:</strong><span id="expense-week">0.00</span></p>
+              <p><strong>This Month:</strong><span id="expense-month">0.00</span></p>
+              <p><strong>This Year:</strong><span id="expense-year">0.00</span></p>
+              <p><strong>Total Expense:</strong><span id="expense-total">0.00</span></p>
+            </div>
+          </div>
+
+          <!-- Expense Calculation Section -->
+          <div class="expense-calculation-container">
+            <h3>Calculate Expenses</h3>
+            <!-- Date Range Inputs -->
+            <form id="expense-calculation-form">
+              <div class="date-range">
+               <div class="form-group">
+        <label for="start-date">Start Date:</label>
+        <input 
+          type="date" 
+          id="start-date" 
+          name="start-date" 
+          required />
+      </div>
+      <div class="form-group">
+        <label for="end-date">End Date:</label>
+        <input 
+          type="date" 
+          id="end-date" 
+          name="end-date" 
+          required />
+      </div>
+    </div>
+    <button type="submit">Calculate Expenses</button>
+  </form>
+  <!-- Expense Result -->
+  <div id="expense-result">
+    <h4>Total Expenses you selected period: <span id="total-expenses">$0.00</span></h4>
+  </div>
+</div>
+</section>
+
+      
+<!-- Module-2: Product Categorization Section -->
+      <section id="product-categorization-section" class="content-section">
+        <h2>Product Categorization and Packaging</h2>
+        <div id="current-stock">
+          <h3>Current Stock: <span id="current-stock-amount">0</span></h3>
+        </div>
+        <div id="inventory-alerts-container" class="inventory-alerts-container">
+          <!-- Alerts will be dynamically inserted here -->
+        </div>
+        <!-- Inventory Table -->
+    <div>
+      <h2>Inventory Table</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Weight</th>
+            <th>Spring Price</th>
+            <th>Fall Price</th>
+            <th>Number of Packets</th>
+            <th>Treshold</th>
+            <th>Last Stock Date</th>
+            <th>Restock Date</th>
+            <th>Days Until Restock</th>
+          </tr>
+        </thead>
+        <tbody id="inventory-table">
+          <!-- Dynamic rows will be added here -->
+        </tbody>
+      </table>
+    </div>
+
+        <!-- Pricing Form -->
+    <div>
+      <h2>Product Pricing</h2>
+      <form id="pricing-form">
+        <div class="form-group">
+          <label for="category-select">Select Category</label>
+          <select id="category-select" required>
+            <option value="">-- Choose a Category --</option>
+            
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="fall-price">Fall Price</label>
+          <input type="number" id="fall-price" step="0.01" min="1"placeholder="Enter Fall Price" required>
+        </div>
+        <div class="form-group">
+          <label for="spring-price">Spring Price</label>
+          <input type="number" id="spring-price" step="0.01" min="1" placeholder="Enter Spring Price" required>
+        </div>
+        <div class="form-group">
+          <button type="button" id="add-pricing-button">Add Pricing</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Packaging Form -->
+    <div>
+      <h2>Packaging</h2>
+      <form id="packaging-form">
+        <div class="form-group">
+          <label for="packaging-category">Select Category</label>
+          <select id="packaging-category" required>
+            <option value="">-- Choose a Category --</option>
+            
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="number-of-packets">Number of Packets</label>
+          <input type="number" id="number-of-packets" min="1" placeholder="Enter Number of Packets" required>
+        </div>
+        <div class="form-group">
+          <label for="stock-date">Stock Date</label>
+          <input type="date" id="stock-date" required>
+        </div>
+        <div class="form-group">
+          <button type="button" id="add-packets-button">Add Packets</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Stock Level -->
+    <div>
+      <h2>Stock Level</h2>
+      <form id="stock-level-form">
+        <div class="form-group">
+          <label for="stock-category">Select Category</label>
+          <select id="stock-category" required>
+            <option value="">-- Choose a Category --</option>
+            
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="stock-level">Minimum Stock Level</label>
+          <input type="number" id="stock-level" min="1" placeholder="Enter Minimum Stock Level" required>
+        </div>
+        <!-- Add Restock Date Input -->
+    <div class="form-group">
+      <label for="restock-date">Restock Date</label>
+      <input type="date" id="restock-date" required>
+    </div>
+        <div class="form-group">
+          <button type="button" id="set-stock-level-button">Set Stock Level</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+<!-- Sales Management Section -->
+<section id="sales-management-section" class="content-section">
+  <h2>Sales Management</h2>
+  <div class="customer-management">
+    <h3>Customer Management</h3>
+    <form id="customer-form" class="form-container">
+      <fieldset>
+        <legend>Add New Customer</legend>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="new-customer-id">Customer ID:</label>
+            <input 
+              type="text" 
+              id="new-customer-id" 
+              readonly />
+          </div>
+          <div class="form-group">
+            <label for="new-customer-name">Name:</label>
+            <input 
+              type="text" 
+              id="new-customer-name" 
+              required />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="new-customer-phone">Phone:</label>
+            <input 
+              type="tel" 
+              id="new-customer-phone" 
+              pattern="\d{10}"
+              required />
+          </div>
+          <div class="form-group">
+            <label for="new-customer-email">Email:</label>
+            <input 
+              type="email" 
+              id="new-customer-email" 
+              required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="new-customer-address">Shipping Address:</label>
+          <textarea 
+            id="new-customer-address" 
+            rows="3" 
+            required></textarea>
+        </div>
+        <button type="submit">Add Customer</button>
+      </fieldset>
+    </form>
+  </div>
+  <form id="sales-form" class="form-container">
+    <!-- Customer Details -->
+    <fieldset>
+      <legend>Customer Details</legend>
+      <div class="form-group">
+        <label for="select-customer">Select Customer:</label>
+        <select id="select-customer" required>
+          <option value="">-- Select Customer --</option>
+          <!-- Will be populated dynamically -->
+        </select>
+      </div>
+      <div id="selected-customer-details" class="customer-preview">
+        <!-- Customer details will be shown here -->
+      </div>
+    </fieldset>
+
+    <!-- Order Details -->
+    <fieldset>
+      <legend>Order Details</legend>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="order-id">Order ID:</label>
+          <input 
+            type="text" 
+            id="order-id" 
+            placeholder="Enter Order ID (e.g., 3001)" 
+            required />
+        </div>
+        <div class="form-group">
+          <label for="product-category">Product Category:</label>
+          <select id="product-category" name="product-category">
+            <option value="small">Small (100g)</option>
+            <option value="medium">Medium (250g)</option>
+            <option value="large">Large (500g)</option>
+            <option value="extra-large">Extra Large (1kg)</option>
+            <option value="family-pack">Family Pack (2kg)</option>
+            <option value="bulk-pack">Bulk Pack (5kg)</option>
+            <option value="premium">Custom Weight</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row" id="custom-weight-group" style="display: none;">
+        <div class="form-group">
+          <label for="custom-weight">Custom Weight (kg):</label>
+          <input 
+            type="number" 
+            id="custom-weight" 
+            name="custom-weight" 
+            min="5"
+            max="100"
+            step="0.1"
+            title="Please enter a valid weight between 5 kg and 100 kg"
+            pattern="^\d*\.?\d+$"
+            placeholder="Enter weight in kg" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="order-date">Order Date:</label>
+          <input 
+            type="date" 
+            id="order-date" 
+            required />
+        </div>
+        <div class="form-group">
+          <label for="quantity-ordered">Quantity Ordered:</label>
+          <input 
+            type="number" 
+            id="quantity-ordered" 
+            placeholder="Enter Quantity" 
+            min="1" 
+            required />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="order-status">Order Status:</label>
+          <select id="order-status" name="order-status">
+            <option value="pending">Pending</option>
+            <option value="processed">Processed</option>
+            <option value="shipped">Shipped</option>
+            <option value="delivered">Delivered</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="total-price">Total Price:</label>
+          <input 
+            type="number" 
+            id="total-price" 
+            placeholder="Auto-calculated" 
+            readonly />
+        </div>
+      </div>
+    </fieldset>
+    <button type="submit">Record Sale</button>
+  </form>
+  <!-- Sales Filtering and Search -->
+<div class="sales-filters">
+  <h3>Search and Filter Sales</h3>
+  <div class="filtering-options">
+    <div class="filter-group">
+      <label for="status-filter">Filter by Status:</label>
+      <select id="status-filter">
+        <option value="">All Statuses</option>
+        <option value="pending">Pending</option>
+        <option value="processed">Processed</option>
+        <option value="shipped">Shipped</option>
+        <option value="delivered">Delivered</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label for="category-filter">Filter by Product Category:</label>
+      <select id="category-filter">
+        <option value="">All Categories</option>
+        <!-- Categories will be populated dynamically -->
+      </select>
+    </div>
+    <div class="search-group">
+      <input type="text" id="sales-search" class="search-input" placeholder="Search by Order ID or Customer Name">
+      <button type="button" class="btn-search" id="search-sales-btn">Search</button>
+      <button type="button" id="clear-sales-btn" class="btn-clear">Clear</button>
+    </div>
+  </div>
+</div>
+ <!-- Sales Records Table -->
+  <div class="sales-records-table">
+    <h3>Sales Records</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Order ID</th>
+          <th>Customer Name</th>
+          <th>Category</th>
+          <th>Quantity</th>
+          <th>Order Date</th>
+          <th>Price per kg/packet</th>
+          <th>Total Price</th>
+          <th>Order Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="sales-records-table">
+        <!-- Sales Records will be dynamically added here -->
+      </tbody>
+    </table>
+  </div>
+  
+  <!-- Sales Summary and Revenue -->
+<div class="sales-summary">
+  <h3>Sales Analytics</h3>
+  <div class="summary-cards">
+    <div class="metric-card">
+      <h4>Daily Revenue</h4>
+      <p id="daily-revenue">$0.00</p>
+    </div>
+    <div class="metric-card">
+      <h4>Weekly Revenue</h4>
+      <p id="weekly-revenue">$0.00</p>
+    </div>
+    <div class="metric-card">
+      <h4>Monthly Revenue</h4>
+      <p id="monthly-revenue">$0.00</p>
+    </div>
+    <div class="metric-card">
+      <h4>Total Revenue</h4>
+      <p id="total-revenue">$0.00</p>
+    </div>
+  </div>
+
+  <!-- Category Revenue Breakdown -->
+  <div class="category-revenue">
+    <h4>Revenue by Category</h4>
+    <table>
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>Units Sold</th>
+          <th>Revenue</th>
+        </tr>
+      </thead>
+      <tbody id="category-revenue-table">
+        <!-- Will be populated dynamically -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Sales Report Generator -->
+  <div class="sales-report">
+    <h3>Sales Reports</h3>
+    <!-- Report Generation Form -->
+  <form id="sales-report-form" class="report-form">
+    <div class="form-row">
+      <div class="form-group">
+        <label for="report-start-date">Start Date:</label>
+        <input type="date" id="report-start-date" required>
+      </div>
+      <div class="form-group">
+        <label for="report-end-date">End Date:</label>
+        <input type="date" id="report-end-date" required>
+      </div>
+    </div>
+    
+    <div class="form-row">
+      <div class="form-group">
+        <label for="report-type">Report Type:</label>
+        <select id="report-type" required>
+          <option value="summary">Summary Report</option>
+          <option value="detailed">Detailed Report</option>
+          <option value="category">Category Analysis</option>
+          <option value="customer">Customer Analysis</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="report-category">Category Filter:</label>
+        <select id="report-category">
+          <option value="all">All Categories</option>
+          <!-- Categories will be populated dynamically -->
+        </select>
+      </div>
+    </div>
+
+    <div class="button-group">
+      <button type="submit">Generate Report</button>
+      <button type="button" id="export-pdf">Export to pdf</button>
+    </div>
+  </form>
+
+  <!-- Charts Section -->
+  <div class="charts-container">
+    <!-- Revenue Chart -->
+    <div class="chart-card">
+      <h4>Revenue by Category</h4>
+      <canvas id="revenue-chart"></canvas>
+    </div>
+    
+    <!-- Units Sold Chart -->
+    <div class="chart-card">
+      <h4>Units Sold Distribution</h4>
+      <canvas id="units-chart"></canvas>
+    </div>
+
+    <!-- Sales Trend Chart -->
+    <div class="chart-card">
+      <h4>Sales Trend</h4>
+      <canvas id="trend-chart"></canvas>
+    </div>
+  </div>
+
+  <!-- Report Results -->
+  <div class="report-results">
+    <div class="summary-section">
+      <h4>Report Summary</h4>
+      <div id="report-summary"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Customer Details Modal -->
+<div id="customer-modal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h3>Customer Details</h3>
+    <div id="customer-details" class="customer-details-container">
+      <!-- Details will be populated dynamically -->
+    </div>
+    <div id="order-history" class="order-history-container">
+      <h4>Order History</h4>
+      <div id="customer-orders">
+        <!-- Order history will be populated dynamically -->
+      </div>
+    </div>
+  </div>
+</div>
+
+</section>
+<section id="financial-section" class="content-section">
+  <h2>Financial Analysis</h2>
+ <!-- Financial Overview Cards -->
+ <div class="summary-cards">
+  <div class="metric-card">
+    <h4>Total Revenue</h4>
+    <p id="total-income">$0.00</p>
+  </div>
+  <div class="metric-card">
+    <h4>Total Expenses</h4>
+    <p id="financial-total-expenses">$0.00</p>
+  </div>
+  <div class="metric-card">
+    <h4>Tax Amount</h4>
+    <p id="tax-amount">$0.00</p>
+  </div>
+  <div class="metric-card">
+    <h4>Net Profit</h4>
+    <p id="net-profit">$0.00</p>
+  </div>
+</div>
+<!-- Tax Configuration -->
+<div class="tax-config">
+  <h3>Tax Settings</h3>
+  <form id="tax-form">
+    <div class="form-group">
+      <label for="tax-rate">Tax Rate (%):</label>
+      <input type="number" id="tax-rate" min="0" max="100" step="0.1" value="18">
+    </div>
+    <button type="submit">Update Tax Rate</button>
+  </form>
+</div>
+
+<!-- Financial Report Generator -->
+<div class="financial-report">
+  <h3>Generate Financial Report</h3>
+  <form id="financial-report-form">
+    <div class="form-row">
+      <div class="form-group">
+        <label for="report-start">Start Date:</label>
+        <input type="date" id="report-start" required>
+      </div>
+      <div class="form-group">
+        <label for="report-end">End Date:</label>
+        <input type="date" id="report-end" required>
+      </div>
+    </div>
+    <button type="submit">Generate Report</button>
+    <button type="button" id="export-financial-report">Export Report</button>
+  </form>
+  
+  <!-- Report Results -->
+  <div id="financial-report-results"></div>
+</div>
+
+<!-- Financial Charts -->
+<div class="financial-charts">
+  <div class="chart-card">
+    <h4>Income vs Expenses</h4>
+    <canvas id="income-expense-chart"></canvas>
+  </div>
+  <div class="chart-card">
+    <h4>Profit Trends</h4>
+    <canvas id="profit-trend-chart"></canvas>
+  </div>
+</div>
+</section>
+
+
+
+<!-- Inventory Management Section -->
+<section id="inventory-management-section" class="content-section">
+  <h2>Inventory Management</h2>
+  <!-- Inventory Reports -->
+  <div class="inventory-reports">
+    <h3>Inventory Reports</h3>
+    <div class="report-controls">
+      <button id="generate-daily-report">Daily Report</button>
+      <button id="generate-weekly-report">Weekly Report</button>
+      <button id="generate-monthly-report">Monthly Report</button>
+    </div>
+    <div id="inventory-report-result"></div>
+  </div>
+
+  <!-- Demand Forecasting -->
+  <div id="forecast-section" class="mt-4">
+    <h3>Demand Forecast</h3>
+    <div id="forecast-chart"></div>
+    <div id="forecast-recommendations" class="mt-3"></div>
+  </div>
+</section>
+
+<section id="comprehensive-report-section" class="content-section">
+  <h2>Comprehensive Report</h2>
+  
+  <!-- Report Generation Form -->
+  <div class="comprehensive-report-container">
+    <form id="comprehensive-report-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="comprehensive-start-date">Start Date:</label>
+          <input type="date" id="comprehensive-start-date" required>
+        </div>
+        <div class="form-group">
+          <label for="comprehensive-end-date">End Date:</label>
+          <input type="date" id="comprehensive-end-date" required>
+        </div>
+      </div>
+      <div class="button-group">
+        <button type="submit">Generate Report</button>
+        <button type="button" id="export-comprehensive-report">Export to PDF</button>
+      </div>
+    </form>
+
+    <!-- Report Display Section -->
+    <div class="report-content">
+      <div id="comprehensive-report-results">
+        <!-- Report content will be generated here -->
+      </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="comprehensive-charts">
+      <div class="chart-card">
+        <h4>Income vs Expenses</h4>
+        <canvas id="comprehensive-overview-chart"></canvas>
+      </div>
+      <div class="chart-card">
+        <h4>Category Distribution</h4>
+        <canvas id="comprehensive-category-chart"></canvas>
+      </div>
+    </div>
+  </div>
+</section>
+      
+    </main>
+  </div>
+</body>
+</html>
