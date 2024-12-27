@@ -248,6 +248,30 @@ tr:nth-child(even) {
   margin-bottom: 20px;
   color: var(--purple-dark);
 }
+.btn-update {
+  background-color: #5bc0de;
+  color: white;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.btn-delete {
+  background-color: #e74236;
+  color: white;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.btn-update:hover {
+  background-color: #2b92b1;
+}
+
+.btn-delete:hover {
+  background-color: #9d0707;
+}
 
 /* Filters Section */
 .filtering-options {
